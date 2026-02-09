@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secret Code Proposal 💖</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+body{overflow:hidden;}
+.heart{position:fixed;font-size:20px;animation:floatUp 6s linear infinite;opacity:0.8;}
+@keyframes floatUp{0%{transform:translateY(100vh);opacity:0;}20%{opacity:1;}100%{transform:translateY(-10vh);opacity:0;}}
+.fade-in{animation:fade 1.5s ease forwards;}
+@keyframes fade{from{opacity:0;transform:scale(0.9);}to{opacity:1;transform:scale(1);}}
+</style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-pink-300 via-rose-300 to-red-300 flex items-center justify-center">
+
+<audio id="bgMusic" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/10/30/audio_3d2d46c6a4.mp3?filename=romantic-piano-ambient-123172.mp3" type="audio/mpeg">
+</audio>
+
+<div id="hearts"></div>
+
+<!-- LOCK SCREEN -->
+<div id="lockScreen" class="bg-white/90 p-10 rounded-3xl shadow-2xl text-center max-w-md w-[90%] fade-in">
+  <h1 class="text-3xl font-bold text-pink-600 mb-2">🔐 Only my soulmate can unlock this 💖</h1>
+  <p class="text-gray-600 mb-6">Answer these 3 questions to unlock my heart 💕</p>
+
+  <input id="anniv" type="text" placeholder="Our anniversary date (DD/MM/YYYY)" class="w-full p-3 rounded-xl border mb-3" />
+  <input id="nick" type="text" placeholder="Your nickname" class="w-full p-3 rounded-xl border mb-3" />
+  <input id="place" type="text" placeholder="Our first kiss (DD/MM/YYYY)" class="w-full p-3 rounded-xl border mb-4" />
+
+  <button id="unlockBtn" class="w-full bg-pink-500 text-white py-3 rounded-xl text-lg shadow-lg hover:scale-105 transition-all">Unlock My Heart 💖</button>
+
+  <p id="error" class="text-red-500 mt-3 hidden">Oops 😅 Try again, soulmate 💕</p>
+</div>
+
+<!-- PROPOSAL SCREEN -->
+<div id="proposalScreen" class="hidden bg-white/90 p-10 rounded-3xl shadow-2xl text-center max-w-md w-[90%] fade-in">
+  <h1 class="text-3xl font-bold text-pink-600 mb-4">You unlocked my heart 💖🔓</h1>
+  <p class="text-xl mb-4">That means you're my soulmate 🥹❤️</p>
+
+  <p class="text-2xl font-semibold text-pink-600 mb-6">Will you be my Valentine? 💍🌹</p>
+
+  <button id="yesBtn" class="px-10 py-4 bg-pink-500 text-white rounded-full text-xl shadow-lg hover:scale-105 transition-all">Yes, Forever 💖</button>
+
+  <p id="finalMsg" class="mt-6 text-2xl font-bold text-green-600 hidden">You just made my heart complete 😭💍❤️</p>
+</div>
+
+<script>
+// ===== CUSTOM SECRET CODES (EDIT THESE) =====
+const SECRET_ANNIV = "27/01/2024";   // example
+const SECRET_NICK = "baby";         // lowercase
+const SECRET_PLACE = "28/03/2024";     // lowercase
+
+const anniv=document.getElementById('anniv');
+const nick=document.getElementById('nick');
+const place=document.getElementById('place');
+const unlockBtn=document.getElementById('unlockBtn');
+const lockScreen=document.getElementById('lockScreen');
+const proposalScreen=document.getElementById('proposalScreen');
+const error=document.getElementById('error');
+const yesBtn=document.getElementById('yesBtn');
+const finalMsg=document.getElementById('finalMsg');
+const hearts=document.getElementById('hearts');
+const music=document.getElementById('bgMusic');
+
+// music
+document.body.addEventListener('click',()=>{ if(music.paused) music.play(); });
+
+// unlock logic
+unlockBtn.addEventListener('click',()=>{
+  if(
+    anniv.value.trim()===SECRET_ANNIV &&
+    nick.value.trim().toLowerCase()===SECRET_NICK &&
+    place.value.trim().toLowerCase()===SECRET_PLACE
+  ){
+    lockScreen.classList.add('hidden');
+    proposalScreen.classList.remove('hidden');
+
+    confetti({particleCount:200,spread:120,origin:{y:0.6}});
+  }else{
+    error.classList.remove('hidden');
+  }
+});
+
+// yes click
+yesBtn.addEventListener('click',()=>{
+  finalMsg.classList.remove('hidden');
+  yesBtn.innerText="Forever Yours 💍❤️";
+  yesBtn.classList.remove('bg-pink-500');
+  yesBtn.classList.add('bg-green-500');
+
+  confetti({particleCount:250,spread:140,origin:{y:0.6}});
+});
+
+// hearts
+function createHeart(){
+  const h=document.createElement('div');
+  h.className='heart';
+  h.innerText='💖';
+  h.style.left=Math.random()*100+'vw';
+  h.style.animationDuration=(Math.random()*3+4)+'s';
+  hearts.appendChild(h);
+  setTimeout(()=>h.remove(),7000);
+}
+setInterval(createHeart,400);
+</script>
+
+</body>
+</html>
